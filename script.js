@@ -1,9 +1,32 @@
+// 1. تعريف العناصر الأساسية
 const taskInput = document.getElementById('taskInput');
 const addBtn = document.getElementById('addBtn');
 const taskList = document.getElementById('taskList');
 const filterBtns = document.querySelectorAll('.filter-btn');
+const themeToggle = document.getElementById('themeToggle');
 
-document.addEventListener('DOMContentLoaded', getTasks);
+// 2. تفعيل الميزات عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    getTasks();
+    checkTheme();
+});
+
+// --- وظيفة الـ Dark Mode ---
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    themeToggle.innerText = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+function checkTheme() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.innerText = '☀️';
+    }
+}
+
+// --- وظيفة إضافة المهام ---
 addBtn.addEventListener('click', addTask);
 
 function addTask() {
@@ -25,13 +48,13 @@ function createTaskElement(task) {
         <button class="delete-btn">حذف</button>
     `;
 
-    // حدث الضغط لإتمام المهمة
+    // تغيير حالة المهمة (مكتملة / غير مكتملة)
     li.querySelector('.task-text').addEventListener('click', () => {
         li.classList.toggle('completed');
         updateLocalTask(task.id);
     });
 
-    // حدث الحذف
+    // حذف المهمة
     li.querySelector('.delete-btn').addEventListener('click', () => {
         li.remove();
         removeTaskFromLocal(task.id);
@@ -40,7 +63,7 @@ function createTaskElement(task) {
     taskList.appendChild(li);
 }
 
-// منطق أزرار الفلترة
+// --- وظيفة الفلترة ---
 filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelector('.filter-btn.active').classList.remove('active');
@@ -64,7 +87,7 @@ filterBtns.forEach(btn => {
     });
 });
 
-// التعامل مع LocalStorage
+// --- التعامل مع التخزين (LocalStorage) ---
 function saveLocalTask(task) {
     let tasks = localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks')) : [];
     tasks.push(task);
