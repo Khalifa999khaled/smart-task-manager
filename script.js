@@ -65,3 +65,45 @@ if(localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
     themeToggle.innerText = '☀️';
 }
+
+// 1. تحديد العناصر
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+// 2. إضافة حدث الضغط لكل زر فلترة
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // تغيير الزر النشط (Active Class)
+        document.querySelector('.filter-btn.active').classList.remove('active');
+        btn.classList.add('active');
+
+        const filterValue = btn.getAttribute('data-filter');
+        filterTasks(filterValue);
+    });
+});
+
+// 3. وظيفة الفلترة الفعلية
+function filterTasks(status) {
+    const items = taskList.querySelectorAll('.task-item');
+    
+    items.forEach(item => {
+        switch (status) {
+            case 'all':
+                item.style.display = 'flex';
+                break;
+            case 'completed':
+                if (item.classList.contains('completed')) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+                break;
+            case 'pending':
+                if (!item.classList.contains('completed')) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+                break;
+        }
+    });
+}
