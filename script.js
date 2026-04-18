@@ -1,21 +1,14 @@
 const taskInput = document.getElementById('taskInput');
 const addBtn = document.getElementById('addBtn');
 const taskList = document.getElementById('taskList');
+const filterBtns = document.querySelectorAll('.filter-btn');
 
-// تحميل المهام من الذاكرة المحلية عند فتح الصفحة
 document.addEventListener('DOMContentLoaded', getTasks);
-
 addBtn.addEventListener('click', addTask);
 
 function addTask() {
-    if (taskInput.value === '') return;
-
-    const taskObj = {
-        id: Date.now(),
-        text: taskInput.value,
-        completed: false
-    };
-
+    if (taskInput.value.trim() === '') return;
+    const taskObj = { id: Date.now(), text: taskInput.value, completed: false };
     createTaskElement(taskObj);
     saveLocalTask(taskObj);
     taskInput.value = '';
@@ -24,16 +17,54 @@ function addTask() {
 function createTaskElement(task) {
     const li = document.createElement('li');
     li.classList.add('task-item');
+    li.setAttribute('data-id', task.id);
     if (task.completed) li.classList.add('completed');
     
     li.innerHTML = `
-        <span onclick="toggleTask(${task.id})">${task.text}</span>
-        <button class="delete-btn" onclick="removeTask(${task.id}, this)">حذف</button>
+        <span class="task-text">${task.text}</span>
+        <button class="delete-btn">حذف</button>
     `;
+
+    // حدث الضغط لإتمام المهمة
+    li.querySelector('.task-text').addEventListener('click', () => {
+        li.classList.toggle('completed');
+        updateLocalTask(task.id);
+    });
+
+    // حدث الحذف
+    li.querySelector('.delete-btn').addEventListener('click', () => {
+        li.remove();
+        removeTaskFromLocal(task.id);
+    });
+
     taskList.appendChild(li);
 }
 
-// وظيفة حفظ البيانات في المتصفح
+// منطق أزرار الفلترة
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelector('.filter-btn.active').classList.remove('active');
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        
+        const allTasks = document.querySelectorAll('.task-item');
+        allTasks.forEach(task => {
+            switch(filter) {
+                case 'all':
+                    task.style.display = 'flex';
+                    break;
+                case 'completed':
+                    task.style.display = task.classList.contains('completed') ? 'flex' : 'none';
+                    break;
+                case 'pending':
+                    task.style.display = !task.classList.contains('completed') ? 'flex' : 'none';
+                    break;
+            }
+        });
+    });
+});
+
+// التعامل مع LocalStorage
 function saveLocalTask(task) {
     let tasks = localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks')) : [];
     tasks.push(task);
@@ -45,65 +76,14 @@ function getTasks() {
     tasks.forEach(task => createTaskElement(task));
 }
 
-function removeTask(id, element) {
-    element.parentElement.remove();
+function updateLocalTask(id) {
     let tasks = JSON.parse(localStorage.getItem('tasks'));
-    tasks = tasks.filter(t => t.id !== id);
+    tasks.forEach(t => { if(t.id === id) t.completed = !t.completed; });
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    themeToggle.innerText = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-});
-
-// عند التحميل، تأكد من الثيم المحفوظ
-if(localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.innerText = '☀️';
-}
-
-// 1. تحديد العناصر
-const filterBtns = document.querySelectorAll('.filter-btn');
-
-// 2. إضافة حدث الضغط لكل زر فلترة
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // تغيير الزر النشط (Active Class)
-        document.querySelector('.filter-btn.active').classList.remove('active');
-        btn.classList.add('active');
-
-        const filterValue = btn.getAttribute('data-filter');
-        filterTasks(filterValue);
-    });
-});
-
-// 3. وظيفة الفلترة الفعلية
-function filterTasks(status) {
-    const items = taskList.querySelectorAll('.task-item');
-    
-    items.forEach(item => {
-        switch (status) {
-            case 'all':
-                item.style.display = 'flex';
-                break;
-            case 'completed':
-                if (item.classList.contains('completed')) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-                break;
-            case 'pending':
-                if (!item.classList.contains('completed')) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-                break;
-        }
-    });
+function removeTaskFromLocal(id) {
+    let tasks = JSON.parse(localStorage.getItem('tasks'));
+    tasks = tasks.filter(t => t.id !== id);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
