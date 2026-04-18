@@ -1,20 +1,21 @@
-/* الألوان الافتراضية (Light Mode) */
 :root {
-    --bg-color: #f8fafc;
+    --bg-color: #f0f2f5;
     --container-bg: #ffffff;
-    --text-color: #1e293b;
-    --input-bg: #ffffff;
-    --border-color: #e2e8f0;
-    --primary-color: #6366f1;
+    --text-color: #1c1e21;
+    --input-bg: #f5f6f7;
+    --border-color: #dddfe2;
+    --primary-color: #1877f2;
+    --item-bg: #ffffff;
 }
 
-/* الألوان عند تفعيل الـ Dark Mode */
 body.dark-mode {
-    --bg-color: #0f172a;
-    --container-bg: #1e293b;
-    --text-color: #f8fafc;
-    --input-bg: #334155;
-    --border-color: #475569;
+    --bg-color: #18191a;
+    --container-bg: #242526;
+    --text-color: #e4e6eb;
+    --input-bg: #3a3b3c;
+    --border-color: #3e4042;
+    --primary-color: #45bd62;
+    --item-bg: #242526;
 }
 
 body {
@@ -23,16 +24,18 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
-    padding-top: 50px;
-    transition: background 0.3s, color 0.3s; /* انتقال ناعم */
+    padding: 50px 20px;
+    margin: 0;
+    transition: all 0.3s ease;
 }
 
 .container {
     background: var(--container-bg);
-    width: 400px;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 header {
@@ -43,19 +46,28 @@ header {
 }
 
 .theme-btn {
+    font-size: 1.5rem;
     cursor: pointer;
     border: none;
     background: none;
-    font-size: 1.5rem;
+    transition: transform 0.2s;
+}
+
+.theme-btn:hover { transform: scale(1.1); }
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 input {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     background: var(--input-bg);
     color: var(--text-color);
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
     outline: none;
 }
 
@@ -63,48 +75,61 @@ button#addBtn {
     background: var(--primary-color);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 0 20px;
     border-radius: 8px;
     cursor: pointer;
-}
-
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.task-item.completed span {
-    text-decoration: line-through;
-    color: #94a3b8;
-}
-
-.delete-btn {
-    color: #ef4444;
-    background: none;
-    border: none;
-    cursor: pointer;
+    font-weight: bold;
 }
 
 .filters {
-    margin: 15px 0;
     display: flex;
-    gap: 5px;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
 .filter-btn {
     flex: 1;
-    padding: 5px;
-    cursor: pointer;
-    background: var(--input-bg);
+    padding: 8px;
     border: 1px solid var(--border-color);
+    background: var(--container-bg);
     color: var(--text-color);
-    border-radius: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .filter-btn.active {
     background: var(--primary-color);
     color: white;
+    border-color: var(--primary-color);
+}
+
+ul { list-style: none; padding: 0; }
+
+.task-item {
+    background: var(--item-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: 0.2s;
+}
+
+.task-item span { cursor: pointer; flex: 1; }
+
+.task-item.completed span {
+    text-decoration: line-through;
+    color: #8a8d91;
+}
+
+.delete-btn {
+    color: #f02849;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
 }
