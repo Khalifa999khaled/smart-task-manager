@@ -1,41 +1,66 @@
+/* الألوان الافتراضية (Light Mode) */
 :root {
-    --primary: #6366f1;
-    --bg: #f8fafc;
-    --text: #1e293b;
+    --bg-color: #f8fafc;
+    --container-bg: #ffffff;
+    --text-color: #1e293b;
+    --input-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --primary-color: #6366f1;
+}
+
+/* الألوان عند تفعيل الـ Dark Mode */
+body.dark-mode {
+    --bg-color: #0f172a;
+    --container-bg: #1e293b;
+    --text-color: #f8fafc;
+    --input-bg: #334155;
+    --border-color: #475569;
 }
 
 body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg);
     display: flex;
     justify-content: center;
     padding-top: 50px;
+    transition: background 0.3s, color 0.3s; /* انتقال ناعم */
 }
 
 .container {
-    background: white;
+    background: var(--container-bg);
     width: 400px;
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.input-group {
+header {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.theme-btn {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
 }
 
 input {
     flex: 1;
     padding: 10px;
-    border: 2px solid #e2e8f0;
+    background: var(--input-bg);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     outline: none;
 }
 
 button#addBtn {
-    background: var(--primary);
+    background: var(--primary-color);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -48,8 +73,7 @@ button#addBtn {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #f1f5f9;
-    transition: 0.3s;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .task-item.completed span {
@@ -59,28 +83,28 @@ button#addBtn {
 
 .delete-btn {
     color: #ef4444;
-    cursor: pointer;
     background: none;
     border: none;
-}
-/* Dark Mode Colors */
-body.dark-mode {
-    --bg: #1e293b;
-    --text: #f8fafc;
-}
-body.dark-mode .container {
-    background: #334155;
-    color: white;
-}
-body.dark-mode input {
-    background: #475569;
-    color: white;
-    border-color: #64748b;
-}
-.theme-btn {
     cursor: pointer;
-    border: none;
-    background: none;
-    font-size: 1.5rem;
-    float: left;
+}
+
+.filters {
+    margin: 15px 0;
+    display: flex;
+    gap: 5px;
+}
+
+.filter-btn {
+    flex: 1;
+    padding: 5px;
+    cursor: pointer;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 5px;
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+    color: white;
 }
